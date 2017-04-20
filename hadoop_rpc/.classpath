@@ -31,7 +31,7 @@
 	<classpathentry kind="lib" path="lib/hadoop-annotations-2.7.3.jar"/>
 	<classpathentry kind="lib" path="lib/hadoop-auth-2.7.3.jar"/>
 	<classpathentry kind="lib" path="lib/hadoop-common-2.7.3-tests.jar"/>
-	<classpathentry kind="lib" path="lib/hadoop-common-2.7.3.jar" sourcepath="G:/hadoop/hadoop-2.7.3/hadoop-2.7.3/share/hadoop/common/sources/hadoop-common-2.7.3-sources.jar"/>
+	<classpathentry kind="lib" path="lib/hadoop-common-2.7.3.jar" sourcepath="E:/hadoop/hadoop-2.7.3/hadoop-2.7.3/share/hadoop/common/sources/hadoop-common-2.7.3-sources.jar"/>
 	<classpathentry kind="lib" path="lib/hadoop-hdfs-2.7.3-tests.jar"/>
 	<classpathentry kind="lib" path="lib/hadoop-hdfs-2.7.3.jar"/>
 	<classpathentry kind="lib" path="lib/hadoop-hdfs-nfs-2.7.3.jar"/>
