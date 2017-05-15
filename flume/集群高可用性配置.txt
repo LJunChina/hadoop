@@ -1,0 +1,104 @@
+c)	master节点上配置/conf/flume-client.properties(source的日志收集)
+#agent1 name
+agent1.channels = c1
+agent1.sources = r1
+agent1.sinks = k1 k2
+
+#set gruop
+agent1.sinkgroups = g1 
+
+#set channel
+agent1.channels.c1.type = memory
+agent1.channels.c1.capacity = 1000
+agent1.channels.c1.transactionCapacity = 100
+
+agent1.sources.r1.channels = c1
+agent1.sources.r1.type = spooldir
+agent1.sources.r1.spoolDir =/usr/local/flume/tmp/TestDir
+
+agent1.sources.r1.interceptors = i1 i2
+agent1.sources.r1.interceptors.i1.type = static
+agent1.sources.r1.interceptors.i1.key = Type
+agent1.sources.r1.interceptors.i1.value = LOGIN
+agent1.sources.r1.interceptors.i2.type = timestamp
+
+# set sink1
+agent1.sinks.k1.channel = c1
+agent1.sinks.k1.type = avro
+agent1.sinks.k1.hostname = worker1
+agent1.sinks.k1.port = 52020
+
+# set sink2
+agent1.sinks.k2.channel = c1
+agent1.sinks.k2.type = avro
+agent1.sinks.k2.hostname = worker2
+agent1.sinks.k2.port = 52020
+
+#set sink group
+agent1.sinkgroups.g1.sinks = k1 k2
+
+#set failover
+agent1.sinkgroups.g1.processor.type = failover
+agent1.sinkgroups.g1.processor.priority.k1 = 10
+agent1.sinkgroups.g1.processor.priority.k2 = 1
+agent1.sinkgroups.g1.processor.maxpenalty = 10000
+
+c)	worker1、worker2节点上配置/conf/flume-servre.properties
+worker1上：
+#set Agent name
+a1.sources = r1
+a1.channels = c1
+a1.sinks = k1
+
+#set channel
+a1.channels.c1.type = memory
+a1.channels.c1.capacity = 1000
+a1.channels.c1.transactionCapacity = 100
+
+# other node,nna to nns
+a1.sources.r1.type = avro
+a1.sources.r1.bind = worker1
+a1.sources.r1.port = 52020
+a1.sources.r1.interceptors = i1
+a1.sources.r1.interceptors.i1.type = static
+a1.sources.r1.interceptors.i1.key = Collector
+a1.sources.r1.interceptors.i1.value = worker1
+a1.sources.r1.channels = c1
+
+#set sink to hdfs
+a1.sinks.k1.type=hdfs
+a1.sinks.k1.hdfs.path=/library/flume
+a1.sinks.k1.hdfs.fileType=DataStream
+a1.sinks.k1.hdfs.writeFormat=TEXT
+a1.sinks.k1.hdfs.rollInterval=1
+a1.sinks.k1.channel=c1
+a1.sinks.k1.hdfs.filePrefix=%Y-%m-%d
+
+worker2上：
+#set Agent name
+a1.sources = r1
+a1.channels = c1
+a1.sinks = k1
+
+#set channel
+a1.channels.c1.type = memory
+a1.channels.c1.capacity = 1000
+a1.channels.c1.transactionCapacity = 100
+
+# other node,nna to nns
+a1.sources.r1.type = avro
+a1.sources.r1.bind = worker2
+a1.sources.r1.port = 52020
+a1.sources.r1.interceptors = i1
+a1.sources.r1.interceptors.i1.type = static
+a1.sources.r1.interceptors.i1.key = Collector
+a1.sources.r1.interceptors.i1.value = worker2
+a1.sources.r1.channels = c1
+#set sink to hdfs
+a1.sinks.k1.type=hdfs
+a1.sinks.k1.hdfs.path=/library/flume
+a1.sinks.k1.hdfs.fileType=DataStream
+a1.sinks.k1.hdfs.writeFormat=TEXT
+a1.sinks.k1.hdfs.rollInterval=1
+a1.sinks.k1.channel=c1
+a1.sinks.k1.hdfs.filePrefix=%Y-%m-%d
